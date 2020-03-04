@@ -1,5 +1,6 @@
 import sys
 from pprint import pprint
+import neal
 import scheduler
 
 
@@ -15,9 +16,6 @@ class Nurse:
         self.minConsecutiveShifts = minConsecutiveShifts
         self.minConsecutiveDaysOff = minConsecutiveDaysOff
         self.maxWeekends = maxWeekends
-
-    def __repr__(self):
-        return str(self.maxWeekends)
 
 
 class Shift:
@@ -62,7 +60,7 @@ def parse(path):
                               for x in max_shifts_data}
                 # TODO: sprawdz czy da sie bez list
                 staff[staff_data[0]] = Nurse(
-                    max_shifts, *list(map(int, staff_data[2:])))
+                    max_shifts, *map(int, staff_data[2:]))
 
             if section == "SECTION_DAYS_OFF":
                 employee, *days = line.split(',')
@@ -82,4 +80,22 @@ def parse(path):
 if __name__ == "__main__":
     path = sys.argv[1]
     shift_types, nurses, horizon = parse(path)
-    print(scheduler.get_bqm())
+    qpu = False
+
+    if qpu:
+        sampler = EmbeddingComposite(
+            DWaveSampler(solver={'qpu': True}))
+    else:
+        sampler = neal.SimulatedAnnealingSampler()
+
+    bqm = scheduler.get_bqm(shift_types, nurses, horizon,
+                            stitch_kwargs={'min_classical_gap': 1})
+
+    if qpu:
+        sampleset = sampler.sample(
+            bqm, chain_strength=chain_strength, num_reads=1000)
+    else:
+        sampleset = sampler.sample(bqm, num_reads=1000)
+
+    solution1 = sampleset.first.sample
+    print(solution1)

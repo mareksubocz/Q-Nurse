@@ -1,0 +1,17 @@
+report/
+
+__pycache__/
+
+test.py
+
+.vscode/
+
+env/
+
+img/gantt/
+
+.DS_Store
+
+*.pyc
+
+test*.py
