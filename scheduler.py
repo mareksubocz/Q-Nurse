@@ -28,7 +28,7 @@ def get_bqm(shift_types, nurses, horizon, stitch_kwargs=None):
 
     csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
 
-    # one shift per person per day
+    # one shift for same person per day
     for nurse in nurses.keys():
         for day in range(horizon):
             labels = {get_label(nurse, day, st) for st in shift_types.keys()}
