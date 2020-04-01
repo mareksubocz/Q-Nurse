@@ -1,8 +1,15 @@
 import xml.etree.ElementTree as ET
-import dwavebinarycsp
 import os
 from operator import le, ge
 from datetime import date, datetime
+from itertools import product
+
+import neal
+import dwavebinarycsp
+from dwave.system.composites import EmbeddingComposite
+from dwave.system.samplers import DWaveSampler
+
+from pprint import pprint
 
 
 def get_label(nurseID, day, shift_type):
@@ -21,18 +28,43 @@ def get_bqm(data, stitch_kwargs=None):
 
     csp = dwavebinarycsp.ConstraintSatisfactionProblem(dwavebinarycsp.BINARY)
 
-    start_date = datetime.strptime(
-        str(data.find('StartDate').text), '%Y-%m-%d').date()
-    end_date = datetime.strptime(
-        str(data.find('EndDate').text), '%Y-%m-%d').date()
+    start_date = datetime.strptime(str(data.find("StartDate").text), "%Y-%m-%d").date()
+    end_date = datetime.strptime(str(data.find("EndDate").text), "%Y-%m-%d").date()
     num_of_days = (end_date - start_date).days + 1
 
     # one shift for same person per day
-    for employee in data.find('Employees'):
+    for employee in data.find("Employees"):
         for day in range(num_of_days):
-            labels = {get_label(employee.attrib['ID'], day, st.attrib['ID'])
-                      for st in data.find('ShiftTypes')}
+            labels = {
+                get_label(employee.attrib["ID"], day, st.attrib["ID"])
+                for st in data.find("ShiftTypes")
+            }
             csp.add_constraint(sum_to_one, labels)
+
+    # somebody every day
+    for day in range(num_of_days):
+        labels = {
+            get_label(emp.attrib["ID"], day, st.attrib["ID"])
+            for emp, st in product(data.find("Employees"), data.find("ShiftTypes"))
+        }
+        csp.add_constraint(sum_to_one, labels)
+
+    # MaxSeq
+    for employee in data.find("Employees"):
+        for contract in employee:
+            if contract.text == "All":
+                continue
+            max_seq = int(
+                data.find(f'.//Contract[@ID="{contract.text}"]/MaxSeq').attrib["value"]
+            )
+            for day in range(num_of_days - (max_seq - 1)):
+                days = list(range(max_seq + 1))
+                shifts = [st.attrib["ID"] for st in data.find("ShiftTypes")]
+                labels = {
+                    get_label(employee.attrib["ID"], day + i, st)
+                    for i, st in product(days, shifts)
+                }
+                csp.add_constraint(lambda *args: sum(args) <= max_seq, labels)
 
     # no not_before violation
     # allowed = {(0, 0), (1, 0), (0, 1)}
@@ -77,11 +109,10 @@ def get_bqm(data, stitch_kwargs=None):
         stitch_kwargs = {}
     bqm = dwavebinarycsp.stitch(csp, **stitch_kwargs)
     pruned_variables = list(bqm.variables)
-    print(pruned_variables)
-    for employee in data.find('Employees'):
+    for employee in data.find("Employees"):
         for day in range(num_of_days):
-            for st in data.find('ShiftTypes'):
-                label = get_label(employee.attrib['ID'], day, st.attrib['ID'])
+            for st in data.find("ShiftTypes"):
+                label = get_label(employee.attrib["ID"], day, st.attrib["ID"])
                 bias = 1
                 if label in pruned_variables:
                     bqm.add_variable(label, bias)
@@ -90,9 +121,24 @@ def get_bqm(data, stitch_kwargs=None):
 
 
 if __name__ == "__main__":
-    file_name = "Instance1.ros"
-    full_file = os.path.abspath(os.path.join('instances1_24', file_name))
-
+    file_name = "Instance_my.ros"
+    full_file = os.path.abspath(os.path.join("instances1_24", file_name))
     data = ET.parse(full_file)
-    print(get_bqm(data))
-    # root = data.getroot()
+
+    bqm = get_bqm(data)
+    print(bqm.to_qubo())
+    # qpu
+    # sampler = EmbeddingComposite(DWaveSampler(solver={"qpu": True}))
+    # sampleset = sampler.sample(bqm, chain_strength=2.0, num_reads=1000)
+
+    # cpu
+    sampler = neal.SimulatedAnnealingSampler()
+    sampleset = sampler.sample(bqm, num_reads=1000)
+
+    solution1 = sampleset.first.sample
+
+    selected_nodes = [
+        k for k, v in solution1.items() if v == 1 and not k.startswith("aux")
+    ]
+
+    pprint(sorted(selected_nodes))

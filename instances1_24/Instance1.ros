@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SchedulingPeriod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<SchedulingPeriod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:noNamespaceSchemaLocation="SchedulingPeriod-3.0.xsd">
 
     <StartDate>2014-01-06</StartDate>
     <EndDate>2014-01-19</EndDate>
- 
+
     <ShiftTypes>
- 
+
         <Shift ID="D">
             <Color>Chartreuse</Color>
             <StartTime>9:0</StartTime>
             <Duration>480</Duration>
-        </Shift>       
-     
+        </Shift>
+
     </ShiftTypes>
 
 
@@ -20,7 +20,7 @@
         <Contract ID="All">
             <MinRestTime label="At least 840 minutes rest after a shift">840</MinRestTime>
         </Contract>
-        
+
         <Contract ID="A">
             <MaxSeq label="Max 5 consecutive shifts" value="5" shift="$"/>
             <MinSeq label="Min 2 consecutive shifts" value="2" shift="$"/>
@@ -28,14 +28,14 @@
             <Workload><TimeUnits><Max><Count>4320</Count><Label>Max 4320 mins</Label></Max></TimeUnits>
                       <TimeUnits><Min><Count>3360</Count><Label>Min 3360 mins</Label></Min></TimeUnits></Workload>
             <Patterns><Match>
-                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>        
+                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>
                 <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>-</Shift></Pattern>
                 <Pattern><StartDay>Saturday</StartDay><Shift>-</Shift><Shift>$</Shift></Pattern>
-                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>    
+                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>
             </Match></Patterns>
             <ValidShifts shift="D,"/>
         </Contract>
-        
+
         <Contract ID="B">
             <MaxSeq label="Max 5 consecutive shifts" value="5" shift="$"/>
             <MinSeq label="Min 2 consecutive shifts" value="2" shift="$"/>
@@ -43,14 +43,14 @@
             <Workload><TimeUnits><Max><Count>4320</Count><Label>Max 4320 mins</Label></Max></TimeUnits>
                       <TimeUnits><Min><Count>3360</Count><Label>Min 3360 mins</Label></Min></TimeUnits></Workload>
             <Patterns><Match>
-                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>        
+                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>
                 <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>-</Shift></Pattern>
                 <Pattern><StartDay>Saturday</StartDay><Shift>-</Shift><Shift>$</Shift></Pattern>
-                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>    
+                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>
             </Match></Patterns>
             <ValidShifts shift="D,"/>
         </Contract>
-        
+
         <Contract ID="C">
             <MaxSeq label="Max 5 consecutive shifts" value="5" shift="$"/>
             <MinSeq label="Min 2 consecutive shifts" value="2" shift="$"/>
@@ -58,14 +58,14 @@
             <Workload><TimeUnits><Max><Count>4320</Count><Label>Max 4320 mins</Label></Max></TimeUnits>
                       <TimeUnits><Min><Count>3360</Count><Label>Min 3360 mins</Label></Min></TimeUnits></Workload>
             <Patterns><Match>
-                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>        
+                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>
                 <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>-</Shift></Pattern>
                 <Pattern><StartDay>Saturday</StartDay><Shift>-</Shift><Shift>$</Shift></Pattern>
-                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>    
+                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>
             </Match></Patterns>
             <ValidShifts shift="D,"/>
         </Contract>
-        
+
         <Contract ID="D">
             <MaxSeq label="Max 5 consecutive shifts" value="5" shift="$"/>
             <MinSeq label="Min 2 consecutive shifts" value="2" shift="$"/>
@@ -73,14 +73,14 @@
             <Workload><TimeUnits><Max><Count>4320</Count><Label>Max 4320 mins</Label></Max></TimeUnits>
                       <TimeUnits><Min><Count>3360</Count><Label>Min 3360 mins</Label></Min></TimeUnits></Workload>
             <Patterns><Match>
-                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>        
+                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>
                 <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>-</Shift></Pattern>
                 <Pattern><StartDay>Saturday</StartDay><Shift>-</Shift><Shift>$</Shift></Pattern>
-                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>    
+                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>
             </Match></Patterns>
             <ValidShifts shift="D,"/>
         </Contract>
-        
+
         <Contract ID="E">
             <MaxSeq label="Max 5 consecutive shifts" value="5" shift="$"/>
             <MinSeq label="Min 2 consecutive shifts" value="2" shift="$"/>
@@ -88,14 +88,14 @@
             <Workload><TimeUnits><Max><Count>4320</Count><Label>Max 4320 mins</Label></Max></TimeUnits>
                       <TimeUnits><Min><Count>3360</Count><Label>Min 3360 mins</Label></Min></TimeUnits></Workload>
             <Patterns><Match>
-                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>        
+                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>
                 <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>-</Shift></Pattern>
                 <Pattern><StartDay>Saturday</StartDay><Shift>-</Shift><Shift>$</Shift></Pattern>
-                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>    
+                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>
             </Match></Patterns>
             <ValidShifts shift="D,"/>
         </Contract>
-        
+
         <Contract ID="F">
             <MaxSeq label="Max 5 consecutive shifts" value="5" shift="$"/>
             <MinSeq label="Min 2 consecutive shifts" value="2" shift="$"/>
@@ -103,14 +103,14 @@
             <Workload><TimeUnits><Max><Count>4320</Count><Label>Max 4320 mins</Label></Max></TimeUnits>
                       <TimeUnits><Min><Count>3360</Count><Label>Min 3360 mins</Label></Min></TimeUnits></Workload>
             <Patterns><Match>
-                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>        
+                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>
                 <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>-</Shift></Pattern>
                 <Pattern><StartDay>Saturday</StartDay><Shift>-</Shift><Shift>$</Shift></Pattern>
-                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>    
+                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>
             </Match></Patterns>
             <ValidShifts shift="D,"/>
         </Contract>
-        
+
         <Contract ID="G">
             <MaxSeq label="Max 5 consecutive shifts" value="5" shift="$"/>
             <MinSeq label="Min 2 consecutive shifts" value="2" shift="$"/>
@@ -118,14 +118,14 @@
             <Workload><TimeUnits><Max><Count>4320</Count><Label>Max 4320 mins</Label></Max></TimeUnits>
                       <TimeUnits><Min><Count>3360</Count><Label>Min 3360 mins</Label></Min></TimeUnits></Workload>
             <Patterns><Match>
-                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>        
+                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>
                 <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>-</Shift></Pattern>
                 <Pattern><StartDay>Saturday</StartDay><Shift>-</Shift><Shift>$</Shift></Pattern>
-                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>    
+                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>
             </Match></Patterns>
             <ValidShifts shift="D,"/>
         </Contract>
-        
+
         <Contract ID="H">
             <MaxSeq label="Max 5 consecutive shifts" value="5" shift="$"/>
             <MinSeq label="Min 2 consecutive shifts" value="2" shift="$"/>
@@ -133,16 +133,16 @@
             <Workload><TimeUnits><Max><Count>4320</Count><Label>Max 4320 mins</Label></Max></TimeUnits>
                       <TimeUnits><Min><Count>3360</Count><Label>Min 3360 mins</Label></Min></TimeUnits></Workload>
             <Patterns><Match>
-                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>        
+                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>
                 <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>-</Shift></Pattern>
                 <Pattern><StartDay>Saturday</StartDay><Shift>-</Shift><Shift>$</Shift></Pattern>
-                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>    
+                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>
             </Match></Patterns>
             <ValidShifts shift="D,"/>
         </Contract>
-          
+
     </Contracts>
-    
+
     <Employees>
         <Employee ID="A">
             <ContractID>All</ContractID>
@@ -176,7 +176,7 @@
             <ContractID>All</ContractID>
             <ContractID>H</ContractID>
         </Employee>
-    
+
     </Employees>
 
     <FixedAssignments>
@@ -190,7 +190,7 @@
         <Employee><EmployeeID>H</EmployeeID><Assign><Shift>-</Shift><Day>7</Day></Assign></Employee>
 
     </FixedAssignments>
-    
+
     <ShiftOffRequests>
         <ShiftOff weight="1"><Shift>D</Shift><EmployeeID>C</EmployeeID><Day>12</Day></ShiftOff>
         <ShiftOff weight="1"><Shift>D</Shift><EmployeeID>C</EmployeeID><Day>13</Day></ShiftOff>
@@ -199,7 +199,7 @@
         <ShiftOff weight="3"><Shift>D</Shift><EmployeeID>H</EmployeeID><Day>3</Day></ShiftOff>
 
     </ShiftOffRequests>
-    
+
     <ShiftOnRequests>
          <ShiftOn weight="2"><Shift>D</Shift><EmployeeID>A</EmployeeID><Day>2</Day></ShiftOn>
          <ShiftOn weight="2"><Shift>D</Shift><EmployeeID>A</EmployeeID><Day>3</Day></ShiftOn>
@@ -224,7 +224,7 @@
          <ShiftOn weight="1"><Shift>D</Shift><EmployeeID>H</EmployeeID><Day>13</Day></ShiftOn>
 
     </ShiftOnRequests>
-    
+
     <CoverRequirements>
       <DateSpecificCover><Day>0</Day>
           <Cover><Shift>D</Shift><Min weight="100">5</Min><Max weight="1">5</Max></Cover>
