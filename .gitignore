@@ -17,3 +17,5 @@ img/gantt/
 test*.py
 
 ocean/
+
+.history/

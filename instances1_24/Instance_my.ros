@@ -168,7 +168,7 @@
     </FixedAssignments>
 
     <ShiftOffRequests>
-        <ShiftOff weight="1"><Shift>D</Shift><EmployeeID>C</EmployeeID><Day>12</Day></ShiftOff>
+        <ShiftOff weight="1"><Shift>D</Shift><EmployeeID>A</EmployeeID><Day>2</Day></ShiftOff>
         <ShiftOff weight="1"><Shift>D</Shift><EmployeeID>C</EmployeeID><Day>13</Day></ShiftOff>
         <ShiftOff weight="3"><Shift>D</Shift><EmployeeID>F</EmployeeID><Day>8</Day></ShiftOff>
         <ShiftOff weight="3"><Shift>D</Shift><EmployeeID>H</EmployeeID><Day>2</Day></ShiftOff>

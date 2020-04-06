@@ -52,7 +52,7 @@ def get_bqm(data, stitch_kwargs=None):
     # MaxSeq
     for employee in data.find("Employees"):
         for contract in employee:
-            if contract.text == "All":
+            if data.find(f'.//Contract[@ID="{contract.text}"]/MaxSeq') is None:
                 continue
             max_seq = int(
                 data.find(f'.//Contract[@ID="{contract.text}"]/MaxSeq').attrib["value"]
@@ -108,6 +108,25 @@ def get_bqm(data, stitch_kwargs=None):
     if stitch_kwargs is None:
         stitch_kwargs = {}
     bqm = dwavebinarycsp.stitch(csp, **stitch_kwargs)
+
+    # ShiftOffRequests
+    for sf in data.find("ShiftOffRequests"):
+        bqm.add_variable(
+            get_label(
+                sf.find("EmployeeID").text, sf.find("Day").text, sf.find("Shift").text
+            ),
+            int(sf.attrib["weight"]),
+        )
+
+    # ShiftOnRequests
+    for sf in data.find("ShiftOnRequests"):
+        bqm.add_variable(
+            get_label(
+                sf.find("EmployeeID").text, sf.find("Day").text, sf.find("Shift").text
+            ),
+            -int(sf.attrib["weight"]),
+        )
+
     pruned_variables = list(bqm.variables)
     for employee in data.find("Employees"):
         for day in range(num_of_days):
@@ -126,7 +145,7 @@ if __name__ == "__main__":
     data = ET.parse(full_file)
 
     bqm = get_bqm(data)
-    print(bqm.to_qubo())
+    # print(bqm.to_qubo())
     # qpu
     # sampler = EmbeddingComposite(DWaveSampler(solver={"qpu": True}))
     # sampleset = sampler.sample(bqm, chain_strength=2.0, num_reads=1000)
@@ -140,5 +159,9 @@ if __name__ == "__main__":
     selected_nodes = [
         k for k, v in solution1.items() if v == 1 and not k.startswith("aux")
     ]
+
+    print("-" * 40)
+    # print(bqm)
+    print("-" * 40)
 
     pprint(sorted(selected_nodes))
