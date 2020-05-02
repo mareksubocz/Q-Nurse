@@ -66,6 +66,21 @@ def get_bqm(data, stitch_kwargs=None):
                 }
                 csp.add_constraint(lambda *args: sum(args) <= max_seq, labels)
 
+    # FixedAssignments
+    # for emp in data.find("FixedAssignments"):
+    #     csp.fix_variable(
+    #         get_label(
+    #             emp.find("EmployeeID").text,
+    #             int(emp.find(".//Assign/Day").text),
+    #             emp.find(".//Assign/Shift").text,
+    #         ),
+    #         1,
+    #     )
+
+    # TODO
+    # mark '-' as day off
+    # use '$' as any shift
+
     # no not_before violation
     # allowed = {(0, 0), (1, 0), (0, 1)}
     # for nurse in nurses.keys():
@@ -145,7 +160,7 @@ if __name__ == "__main__":
     data = ET.parse(full_file)
 
     bqm = get_bqm(data)
-    # print(bqm.to_qubo())
+    print(bqm.to_qubo())
     # qpu
     # sampler = EmbeddingComposite(DWaveSampler(solver={"qpu": True}))
     # sampleset = sampler.sample(bqm, chain_strength=2.0, num_reads=1000)

@@ -3,11 +3,17 @@
                   xsi:noNamespaceSchemaLocation="SchedulingPeriod-3.0.xsd">
 
     <StartDate>2014-01-06</StartDate>
-    <EndDate>2014-01-10</EndDate>
+    <EndDate>2014-01-13</EndDate>
 
     <ShiftTypes>
 
         <Shift ID="D">
+            <Color>Chartreuse</Color>
+            <StartTime>9:0</StartTime>
+            <Duration>480</Duration>
+        </Shift>
+
+         <Shift ID="E">
             <Color>Chartreuse</Color>
             <StartTime>9:0</StartTime>
             <Duration>480</Duration>
@@ -152,18 +158,21 @@
             <ContractID>All</ContractID>
             <ContractID>B</ContractID>
         </Employee>
+        <Employee ID="C">
+            <ContractID>All</ContractID>
+            <ContractID>B</ContractID>
+        </Employee>
+
 
     </Employees>
 
     <FixedAssignments>
-        <Employee><EmployeeID>A</EmployeeID><Assign><Shift>-</Shift><Day>0</Day></Assign></Employee>
-        <Employee><EmployeeID>B</EmployeeID><Assign><Shift>-</Shift><Day>5</Day></Assign></Employee>
-        <Employee><EmployeeID>C</EmployeeID><Assign><Shift>-</Shift><Day>8</Day></Assign></Employee>
-        <Employee><EmployeeID>D</EmployeeID><Assign><Shift>-</Shift><Day>2</Day></Assign></Employee>
-        <Employee><EmployeeID>E</EmployeeID><Assign><Shift>-</Shift><Day>9</Day></Assign></Employee>
-        <Employee><EmployeeID>F</EmployeeID><Assign><Shift>-</Shift><Day>5</Day></Assign></Employee>
-        <Employee><EmployeeID>G</EmployeeID><Assign><Shift>-</Shift><Day>1</Day></Assign></Employee>
-        <Employee><EmployeeID>H</EmployeeID><Assign><Shift>-</Shift><Day>7</Day></Assign></Employee>
+        <Employee><EmployeeID>A</EmployeeID><Assign><Shift>D</Shift><Day>0</Day></Assign></Employee>
+        <Employee><EmployeeID>B</EmployeeID><Assign><Shift>D</Shift><Day>1</Day></Assign></Employee>
+        <Employee><EmployeeID>A</EmployeeID><Assign><Shift>D</Shift><Day>2</Day></Assign></Employee>
+        <Employee><EmployeeID>B</EmployeeID><Assign><Shift>D</Shift><Day>3</Day></Assign></Employee>
+        <Employee><EmployeeID>A</EmployeeID><Assign><Shift>D</Shift><Day>4</Day></Assign></Employee>
+        <Employee><EmployeeID>B</EmployeeID><Assign><Shift>D</Shift><Day>5</Day></Assign></Employee>
 
     </FixedAssignments>
 
