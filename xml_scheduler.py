@@ -7,28 +7,40 @@ import neal
 import dwavebinarycsp
 from dwave.system.composites import EmbeddingComposite
 from dwave.system.samplers import DWaveSampler
+import colored_traceback.always
 
 from pprint import pprint
 from collections import defaultdict
 
-# TODO: wszyscy mają tylko dwa kontrakty - all i swój
-# TODO: FixedAssignment jest zawsze na minus
-
-
 def get_label(nurseID, day, shift_type):
     return f"{nurseID}_{day}_{shift_type}"
-
 
 def sum_to_one(*args):
     return sum(args) == 1
 
-
-def sum_to_n(n, *args):
-    return sum(args) == n
-
+def leq_than_one(*args):
+    return sum(args) <= 1
 
 def find_el_with_attrib(elements, attrib, value):
     return next(filter(lambda x: x[attrib] == value, elements), None)
+
+def check_minimum_consecutive(num_of_shift_types, dayOff, *args):
+    """
+    Pass labels from value + 1 days in *args.
+    dayOff - True if it's minimum consecutive days off
+    """
+    args = list(args[0])
+    begin = False
+    count = 0
+    for i in range(0, len(args), num_of_shift_types):
+        if begin:
+            count += 1
+        if sum(args[i:i+num_of_shift_types]) == dayOff:
+            if not begin:
+                begin = True
+            elif count > 1:
+                return False
+    return True
 
 
 def get_bqm(data, stitch_kwargs=None):
@@ -58,7 +70,7 @@ def get_bqm(data, stitch_kwargs=None):
         for day in range(num_of_days):
             labels = {get_label(employee["ID"], day, st)
                       for st in validShifts[employee['ID']]}
-            csp.add_constraint(sum_to_one, labels)
+            csp.add_constraint(leq_than_one, labels)
 
     # (2) no not_before violation
     not_before = defaultdict(set)
@@ -114,12 +126,47 @@ def get_bqm(data, stitch_kwargs=None):
         contract = find_el_with_attrib(
             data.Contracts.Contract, "ID", employee.ContractID[1].cdata
         )
-        min_seq = int(find_el_with_attrib(contract.MinSeq, 'shift', '$')['value'])
-        # TODO jak to sprawdzić
+        min_seq = find_el_with_attrib(contract.MinSeq, 'shift', '$')
+        if min_seq is None:
+            continue
+        min_seq = int(min_seq['value'])
+        num_of_shift_types = len(validShifts[employee['ID']])
+        for day in range(num_of_days - (min_seq+1)):
+            days = list(range(min_seq+1))
+            labels = [
+                get_label(employee["ID"], day + i, st)
+                for i, st in product(days, validShifts[employee['ID']])
+            ]
+            csp.add_constraint(lambda *args: check_minimum_consecutive(num_of_shift_types, False, args), labels)
 
     # (7) Minimum Consecutive Days Off
+    for employee in data.Employees.Employee:
+        contract = find_el_with_attrib(
+            data.Contracts.Contract, "ID", employee.ContractID[1].cdata
+        )
+        min_seq = int(find_el_with_attrib(contract.MinSeq, 'shift', '-')['value'])
+        num_of_shift_types = len(validShifts[employee['ID']])
+        for day in range(num_of_days - (min_seq+1)):
+            days = list(range(min_seq+1))
+            labels = [
+                get_label(employee["ID"], day + i, st)
+                for i, st in product(days, validShifts[employee['ID']])
+            ]
+            csp.add_constraint(lambda *args: check_minimum_consecutive(num_of_shift_types, True, args), labels)
 
     # (8) Maximum nubmer of weekends
+    for employee in data.Employees.Employee:
+        labels = set()
+        for day in range(num_of_days):
+            if day % 7 == 5 or day % 7 == 6:
+                labels.update({
+                    get_label(employee['ID'], day, st)
+                    for st in validShifts[employee['ID']]
+                })
+        max_weekends = int(find_el_with_attrib(
+            data.Contracts.Contract, 'ID', employee.ContractID[1].cdata
+        ).Patterns.Match.Max.Count.cdata)
+        csp.add_constraint(lambda *args: sum(args) <= max_weekends, labels)
 
     # (9) FixedAssignments, in paper descibed as days off
     for emp in data.FixedAssignments.Employee:
@@ -136,8 +183,8 @@ def get_bqm(data, stitch_kwargs=None):
     # somebody every day
     for day in range(num_of_days):
         labels = {
-            get_label(emp.attrib["ID"], day, st.attrib["ID"])
-            for emp, st in product(data.find("Employees"), data.find("ShiftTypes"))
+            get_label(emp["ID"], day, st["ID"])
+            for emp, st in product(data.Employees.Employee, data.ShiftTypes.Shift)
         }
         csp.add_constraint(sum_to_one, labels)
 
@@ -192,10 +239,10 @@ def get_bqm(data, stitch_kwargs=None):
 
 
 if __name__ == "__main__":
-    file_name = "Instance_my.ros"
+    file_name = "Instance1.ros"
     full_file = os.path.abspath(os.path.join("instances1_24", file_name))
     # data = ET.parse(full_file)
-    data = untangle.parse("it/Q-Nurse/instances1_24/Instance24.ros")
+    data = untangle.parse(full_file)
     data = data.SchedulingPeriod
     bqm = get_bqm(data)
     print(bqm.to_qubo())
@@ -214,7 +261,7 @@ if __name__ == "__main__":
     ]
 
     print("-" * 40)
-    # print(bqm)
+    print(bqm)
     print("-" * 40)
 
     pprint(sorted(selected_nodes))
