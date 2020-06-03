@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SchedulingPeriod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:noNamespaceSchemaLocation="SchedulingPeriod-3.0.xsd">
+
+    <StartDate>2014-01-06</StartDate>
+    <EndDate>2014-01-09</EndDate>
+
+    <ShiftTypes>
+
+        <Shift ID="D">
+            <Color>Chartreuse</Color>
+            <StartTime>9:0</StartTime>
+            <Duration>480</Duration>
+        </Shift>
+
+    </ShiftTypes>
+
+
+    <Contracts>
+        <Contract ID="All">
+            <MinRestTime label="At least 840 minutes rest after a shift">840</MinRestTime>
+        </Contract>
+
+        <Contract ID="A">
+            <MaxSeq label="Max 5 consecutive shifts" value="5" shift="$"/>
+            <MinSeq label="Min 2 consecutive shifts" value="2" shift="$"/>
+            <MinSeq label="Min 2 consecutive days off" value="2" shift="-"/>
+            <Workload><TimeUnits><Max><Count>4320</Count><Label>Max 4320 mins</Label></Max></TimeUnits>
+                      <TimeUnits><Min><Count>3360</Count><Label>Min 3360 mins</Label></Min></TimeUnits></Workload>
+            <Patterns><Match>
+                <Max><Count>1</Count><Label>Max 1 weekends</Label></Max>
+                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>-</Shift></Pattern>
+                <Pattern><StartDay>Saturday</StartDay><Shift>-</Shift><Shift>$</Shift></Pattern>
+                <Pattern><StartDay>Saturday</StartDay><Shift>$</Shift><Shift>$</Shift></Pattern>
+            </Match></Patterns>
+            <ValidShifts shift="D,"/>
+        </Contract>
+
+    </Contracts>
+
+    <Employees>
+        <Employee ID="A">
+            <ContractID>All</ContractID>
+            <ContractID>A</ContractID>
+        </Employee>
+        <Employee ID="B">
+            <ContractID>All</ContractID>
+            <ContractID>A</ContractID>
+        </Employee>
+    </Employees>
+
+    <FixedAssignments>
+        <Employee><EmployeeID>A</EmployeeID><Assign><Shift>-</Shift><Day>0</Day></Assign></Employee>
+        <!-- <Employee><EmployeeID>B</EmployeeID><Assign><Shift>-</Shift><Day>5</Day></Assign></Employee> -->
+
+    </FixedAssignments>
+
+    <ShiftOffRequests>
+        <ShiftOff weight="3"><Shift>D</Shift><EmployeeID>A</EmployeeID><Day>2</Day></ShiftOff>
+        <ShiftOff weight="3"><Shift>D</Shift><EmployeeID>B</EmployeeID><Day>3</Day></ShiftOff>
+
+    </ShiftOffRequests>
+
+    <ShiftOnRequests>
+         <ShiftOn weight="3"><Shift>D</Shift><EmployeeID>B</EmployeeID><Day>0</Day></ShiftOn>
+
+    </ShiftOnRequests>
+
+    <CoverRequirements>
+      <DateSpecificCover><Day>0</Day>
+          <Cover><Shift>D</Shift><Min weight="100">5</Min><Max weight="1">5</Max></Cover>
+      </DateSpecificCover>
+      <DateSpecificCover><Day>1</Day>
+          <Cover><Shift>D</Shift><Min weight="100">7</Min><Max weight="1">7</Max></Cover>
+      </DateSpecificCover>
+      <DateSpecificCover><Day>2</Day>
+          <Cover><Shift>D</Shift><Min weight="100">6</Min><Max weight="1">6</Max></Cover>
+      </DateSpecificCover>
+      <DateSpecificCover><Day>3</Day>
+          <Cover><Shift>D</Shift><Min weight="100">4</Min><Max weight="1">4</Max></Cover>
+      </DateSpecificCover>
+      <!-- <DateSpecificCover><Day>4</Day>
+          <Cover><Shift>D</Shift><Min weight="100">5</Min><Max weight="1">5</Max></Cover>
+      </DateSpecificCover> -->
+      <!-- <DateSpecificCover><Day>5</Day>
+          <Cover><Shift>D</Shift><Min weight="100">5</Min><Max weight="1">5</Max></Cover>
+      </DateSpecificCover> -->
+      <!-- <DateSpecificCover><Day>6</Day>
+          <Cover><Shift>D</Shift><Min weight="100">5</Min><Max weight="1">5</Max></Cover>
+      </DateSpecificCover> -->
+    </CoverRequirements>
+
+</SchedulingPeriod>
